@@ -1,8 +1,8 @@
 <?php
 /**
- * @desc GovernmentController.php 描述信息
+ * @desc 伪代码
  * @author Tinywan(ShaoBo Wan)
- * @date 2023/11/14 15:14
+ * @date 2024/11/14 15:14
  */
 declare(strict_types=1);
 
@@ -15,18 +15,22 @@ try {
     $worker->onWorkerStart = function () {
         $http = new Workerman\Http\Client();
 
-        for ($i = 0; $i<100;$i++) {
-            $response = $http->get('https://www.tinywan.com/');
-            echo '[x] [任务1]['.$i.'][状态码] '.$response->getStatusCode() .date('Y-m-d H:i:s'). PHP_EOL;
-//            echo '[x] [任务1]['.$i.'][状态码] '.date('Y-m-d H:i:s'). PHP_EOL;
-        }
+        $response = $http->get('https://www.tinywan.com/');
+        var_dump($response->getStatusCode());
+        //echo $response->getBody() . PHP_EOL;
 
-        for ($i = 0; $i<20;$i++) {
-            $response = $http->get('https://www.tinywan.com/');
-            echo '[x] [任务2]['.$i.'][状态码] '.$response->getStatusCode()  .date('Y-m-d H:i:s'). PHP_EOL;
-//            echo '[x] [任务2]['.$i.'][状态码] '.date('Y-m-d H:i:s'). PHP_EOL;
-        }
+        $response = $http->post('https://www.tinywan.com/', ['key1' => 'value1', 'key2' => 'value2']);
+        var_dump($response->getStatusCode());
+        // echo $response->getBody() . PHP_EOL;
 
+        $response = $http->request('https://www.tinywan.com/', [
+            'method' => 'GET',
+            'version' => '1.1',
+            'headers' => ['Connection' => 'keep-alive'],
+            'data' => ['key1' => 'value1', 'key2' => 'value2'],
+        ]);
+        var_dump($response->getStatusCode());
+        // echo $response->getBody() . PHP_EOL;
     };
     Worker::runAll();
 } catch (Throwable $throwable) {
